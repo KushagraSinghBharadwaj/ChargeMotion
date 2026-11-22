@@ -49,3 +49,14 @@ dist-ssr
 *.exe
 *.msi
 *.dll
+# Windows application build files
+/Windows/node_modules/
+/Windows/dist/
+/Windows/src-tauri/target/
+
+# Local Store packages and development certificates
+/Windows/msix-package/
+/Windows/release-artifacts/
+*.msix
+*.pfx
+*.p12
