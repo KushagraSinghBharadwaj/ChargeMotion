@@ -83,11 +83,11 @@ Build the Windows application:
 
 ## Project Structure
 
-- src/ â€” Frontend application code and styles.
-- src-tauri/ â€” Rust backend and Tauri configuration.
-- public/ â€” Public application assets.
-- index.html â€” Main application entry point.
-- wallpaper.html â€” Wallpaper window entry point.
+- src/ Ã¢â‚¬â€ Frontend application code and styles.
+- src-tauri/ Ã¢â‚¬â€ Rust backend and Tauri configuration.
+- public/ Ã¢â‚¬â€ Public application assets.
+- index.html Ã¢â‚¬â€ Main application entry point.
+- wallpaper.html Ã¢â‚¬â€ Wallpaper window entry point.
 
 ## Platform Support
 
@@ -101,7 +101,7 @@ Bug reports, suggestions and contributions are welcome. Please test changes befo
 
 ## License
 
-No license has been selected yet. Reuse and redistribution permissions have not been granted.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Creator
 
