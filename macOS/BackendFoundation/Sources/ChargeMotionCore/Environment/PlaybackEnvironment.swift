@@ -35,12 +35,29 @@ public final class PlaybackEnvironment: ObservableObject {
     private var fullscreenTimer: Timer?
 
     public init() {
+        startMonitoring()
+    }
+
+    /// Starts environment observers and full-screen polling exactly once.
+    public func startMonitoring() {
+        guard fullscreenTimer == nil else {
+            refresh()
+            return
+        }
+
         observePowerMode()
         observeApplicationActivity()
         observeSleepWake()
         observeScreenLock()
         refreshFullScreenState()
         startFullScreenPolling()
+    }
+
+    deinit {
+        fullscreenTimer?.invalidate()
+        notificationObservers.forEach { DistributedNotificationCenter.default().removeObserver($0) }
+        standardNotificationObservers.forEach { NotificationCenter.default.removeObserver($0) }
+        workspaceObservers.forEach { NSWorkspace.shared.notificationCenter.removeObserver($0) }
     }
 
     public var shouldPausePlayback: Bool {

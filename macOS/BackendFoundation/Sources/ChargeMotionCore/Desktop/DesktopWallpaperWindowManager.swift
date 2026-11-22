@@ -80,7 +80,8 @@ public final class DesktopWallpaperWindowManager: ObservableObject {
 
         // Update or create windows for connected displays.
         for (displayID, screen) in screensByID {
-            guard let player = playersByDisplayID[displayID] else {
+            // Reuse the shared wallpaper player for displays connected after startup.
+            guard let player = playersByDisplayID[displayID] ?? playersByDisplayID.values.first else {
                 if let oldWindow = windows.removeValue(forKey: displayID) {
                     oldWindow.detachPlayer()
                     oldWindow.orderOut(nil)

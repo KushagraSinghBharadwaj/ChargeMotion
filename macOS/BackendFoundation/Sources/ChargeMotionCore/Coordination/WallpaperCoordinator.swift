@@ -51,6 +51,7 @@ public final class WallpaperCoordinator: ObservableObject {
         }
 
         isRunning = true
+        playbackEnvironment.startMonitoring()
         powerSubscription = powerMonitor.$state
             .removeDuplicates()
             .sink { [weak self] newState in
@@ -90,6 +91,7 @@ public final class WallpaperCoordinator: ObservableObject {
         environmentSubscription?.cancel()
         environmentSubscription = nil
         powerMonitor.stop()
+        playbackEnvironment.stopMonitoring()
         playbackController.stop()
         windowManager.hideAll()
         activeMediaID = nil
