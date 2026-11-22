@@ -30,17 +30,17 @@ public final class WallpaperCoordinator: ObservableObject {
     public init(
         mediaLibrary: MediaLibraryStore,
         settings: AppSettings = AppSettings(),
-        powerMonitor: IOKitPowerMonitor = IOKitPowerMonitor(),
-        playbackController: VideoPlaybackController = VideoPlaybackController(),
-        windowManager: DesktopWallpaperWindowManager = DesktopWallpaperWindowManager(),
-        playbackEnvironment: PlaybackEnvironment = PlaybackEnvironment()
+        powerMonitor: IOKitPowerMonitor? = nil,
+        playbackController: VideoPlaybackController? = nil,
+        windowManager: DesktopWallpaperWindowManager? = nil,
+        playbackEnvironment: PlaybackEnvironment? = nil
     ) {
         self.mediaLibrary = mediaLibrary
         self.settings = settings
-        self.powerMonitor = powerMonitor
-        self.playbackController = playbackController
-        self.windowManager = windowManager
-        self.playbackEnvironment = playbackEnvironment
+        self.powerMonitor = powerMonitor ?? IOKitPowerMonitor()
+        self.playbackController = playbackController ?? VideoPlaybackController()
+        self.windowManager = windowManager ?? DesktopWallpaperWindowManager()
+        self.playbackEnvironment = playbackEnvironment ?? PlaybackEnvironment()
     }
 
     /// Starts power monitoring and immediately calculates the wallpaper plan.
