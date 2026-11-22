@@ -1,0 +1,23 @@
+{
+    "$schema":  "../gen/schemas/desktop-schema.json",
+    "identifier":  "default",
+    "description":  "Permissions for ChargeMotion dashboard and wallpaper windows",
+    "windows":  [
+                    "main",
+                    "wallpaper"
+                ],
+    "permissions":  [
+                        "core:default",
+                        "core:window:allow-set-fullscreen",
+                        "core:window:allow-set-position",
+                        "core:window:allow-set-size",
+                        "dialog:allow-open",
+                        "autostart:allow-enable",
+                        "autostart:allow-disable",
+                        "autostart:allow-is-enabled",
+                        "wallpaper:default",
+                        "log:default",
+                        "core:window:allow-show",
+                        "core:window:allow-hide"
+                    ]
+}

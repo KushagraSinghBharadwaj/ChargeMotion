@@ -1,0 +1,27 @@
+
+[package]
+name = "chargemotion"
+version = "0.1.0"
+description = "ChargeMotion - A cross-platform power-aware video experience"
+edition = "2024"
+rust-version = "1.93"
+
+[lib]
+name = "app_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2.7.6", features = [] }
+
+[dependencies]
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+log = "0.4"
+tauri = { version = "2.12.7", features = ["protocol-asset", "tray-icon"] }
+tauri-plugin-log = "2"
+tauri-plugin-dialog = "2"
+tauri-plugin-autostart = "2"
+tauri-plugin-wallpaper = "4.1.0"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows-sys = { version = "0.59", features = ["Win32_System_Power"] }
