@@ -60,3 +60,7 @@ dist-ssr
 *.msix
 *.pfx
 *.p12
+
+# ChargeMotion macOS local backups
+/macOS/ChargeMotion-*-Backup*/
+/macOS/ChargeMotionApp/Task6-Backup/

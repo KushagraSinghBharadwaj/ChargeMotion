@@ -1,0 +1,47 @@
+# XcodeGen specification for the ChargeMotion macOS app.
+# Generate the Xcode project on a Mac with:  xcodegen generate
+name: ChargeMotion
+options:
+  bundleIdPrefix: com.chargemotion
+  createIntermediateGroups: true
+  developmentLanguage: en
+  deploymentTarget:
+    macOS: "14.0"
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    ENABLE_HARDENED_RUNTIME: YES
+    # App Sandbox is off for the first builds: the backend reads IOKit power
+    # sources, lists on-screen windows and places desktop-level windows.
+    # Revisit before any distribution build (see Documentation/FRONTEND-README.md).
+    ENABLE_APP_SANDBOX: NO
+    CODE_SIGN_STYLE: Automatic
+    CODE_SIGN_IDENTITY: "-"
+
+packages:
+  ChargeMotionCore:
+    path: ../BackendFoundation
+
+targets:
+  ChargeMotion:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources
+      - path: Resources
+      - path: Config
+        buildPhase: none
+    dependencies:
+      - package: ChargeMotionCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.chargemotion.macos
+        PRODUCT_NAME: ChargeMotion
+        INFOPLIST_FILE: Config/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
