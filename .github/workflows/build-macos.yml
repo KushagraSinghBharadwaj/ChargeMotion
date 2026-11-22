@@ -1,0 +1,123 @@
+﻿name: Build and Release ChargeMotion for macOS
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+    paths:
+      - 'macOS/ChargeMotionApp/**'
+      - 'macOS/BackendFoundation/**'
+      - '.github/workflows/build-macos.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Check macOS build tools
+        run: |
+          sw_vers
+          xcodebuild -version
+
+      - name: Install XcodeGen
+        run: |
+          brew install xcodegen
+
+      - name: Validate app icon
+        working-directory: macOS/ChargeMotionApp
+        run: |
+          python3 -m json.tool Resources/Assets.xcassets/AppIcon.appiconset/Contents.json > /dev/null
+          test "$(find Resources/Assets.xcassets/AppIcon.appiconset -name 'icon-*.png' | wc -l)" -eq 10
+
+      - name: Generate Xcode project
+        working-directory: macOS/ChargeMotionApp
+        run: xcodegen generate
+
+      - name: Resolve Swift packages
+        working-directory: macOS/ChargeMotionApp
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project ChargeMotion.xcodeproj \
+            -scheme ChargeMotion
+
+      - name: Build ChargeMotion
+        working-directory: macOS/ChargeMotionApp
+        run: |
+          xcodebuild \
+            -project ChargeMotion.xcodeproj \
+            -scheme ChargeMotion \
+            -configuration Release \
+            -destination 'platform=macOS' \
+            -derivedDataPath "$RUNNER_TEMP/ChargeMotionDerived" \
+            CODE_SIGNING_ALLOWED=YES \
+            CODE_SIGN_IDENTITY=- \
+            build
+
+      - name: Verify app bundle
+        run: |
+          APP="$RUNNER_TEMP/ChargeMotionDerived/Build/Products/Release/ChargeMotion.app"
+          test -d "$APP"
+          test -x "$APP/Contents/MacOS/ChargeMotion"
+          codesign --verify --deep --strict "$APP"
+          echo "ChargeMotion app bundle verified."
+
+      - name: Create installer DMG
+        run: |
+          APP="$RUNNER_TEMP/ChargeMotionDerived/Build/Products/Release/ChargeMotion.app"
+          STAGING="$RUNNER_TEMP/ChargeMotion-Staging"
+          DMG="$RUNNER_TEMP/ChargeMotion.dmg"
+
+          mkdir -p "$STAGING"
+          ditto "$APP" "$STAGING/ChargeMotion.app"
+          ln -s /Applications "$STAGING/Applications"
+
+          cat > "$STAGING/INSTALL.txt" <<'EOF'
+          CHARGEMOTION FOR macOS
+
+          1. Open this disk image.
+          2. Drag ChargeMotion into Applications.
+          3. Open Applications and launch ChargeMotion.
+
+          If macOS blocks the first launch:
+          Open System Settings > Privacy & Security.
+          Find the ChargeMotion security message.
+          Select Open Anyway and confirm.
+
+          Requires macOS 14 or later.
+          EOF
+
+          hdiutil create \
+            -volname "ChargeMotion" \
+            -srcfolder "$STAGING" \
+            -ov \
+            -format UDZO \
+            "$DMG"
+
+          test -s "$DMG"
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ChargeMotion-macOS-Installer
+          path: ${{ runner.temp }}/ChargeMotion.dmg
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Publish permanent GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            "$RUNNER_TEMP/ChargeMotion.dmg" \
+            --title "ChargeMotion $GITHUB_REF_NAME" \
+            --generate-notes
