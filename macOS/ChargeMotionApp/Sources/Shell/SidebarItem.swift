@@ -2,7 +2,7 @@ import SwiftUI
 
 /// Every top-level page. Declaration order is the sidebar order and the Go-menu shortcut order.
 enum SidebarItem: String, CaseIterable, Identifiable, Hashable {
-    case dashboard, videoLibrary, displays, chargingWallpaper, batteryWallpaper, settings, about
+    case dashboard, videoLibrary, displays, chargingWallpaper, batteryWallpaper, threeDStudio, settings, about
 
     var id: String { rawValue }
 
@@ -13,6 +13,7 @@ enum SidebarItem: String, CaseIterable, Identifiable, Hashable {
         case .displays: return "Displays"
         case .chargingWallpaper: return "Charging Wallpaper"
         case .batteryWallpaper: return "Battery Wallpaper"
+        case .threeDStudio: return "3D Studio"
         case .settings: return "Settings"
         case .about: return "About"
         }
@@ -25,6 +26,7 @@ enum SidebarItem: String, CaseIterable, Identifiable, Hashable {
         case .displays: return "Connected displays and where ChargeMotion is showing wallpaper."
         case .chargingWallpaper: return "The video that plays while your Mac is connected to power."
         case .batteryWallpaper: return "The video that plays while your Mac is running on battery."
+        case .threeDStudio: return "Explore the interactive mechanical koi and creator medallion."
         case .settings: return "Playback, power saving and startup preferences."
         case .about: return "About ChargeMotion."
         }
@@ -37,6 +39,7 @@ enum SidebarItem: String, CaseIterable, Identifiable, Hashable {
         case .displays: return "display.2"
         case .chargingWallpaper: return "bolt.fill"
         case .batteryWallpaper: return "battery.50"
+        case .threeDStudio: return "cube.transparent"
         case .settings: return "gearshape"
         case .about: return "info.circle"
         }
