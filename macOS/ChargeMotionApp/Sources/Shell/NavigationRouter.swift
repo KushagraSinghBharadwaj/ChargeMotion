@@ -17,7 +17,7 @@ extension FocusedValues {
     }
 }
 
-/// "Go" menu: Command-1 ... Command-7.
+/// "Go" menu: Command-1 ... Command-8.
 struct NavigationCommands: Commands {
     @FocusedValue(\.navigationRouter) private var router
 

@@ -69,6 +69,7 @@ struct AppShellView: View {
         case .displays: DisplaysView(ctx: ctx)
         case .chargingWallpaper: WallpaperRoleView(role: .charging, ctx: ctx)
         case .batteryWallpaper: WallpaperRoleView(role: .battery, ctx: ctx)
+        case .threeDStudio: ChargeMotion3DShowcaseView(isActive: router.selection == .threeDStudio)
         case .settings: SettingsView(services: ctx.services)
         case .about: AboutView()
         }
