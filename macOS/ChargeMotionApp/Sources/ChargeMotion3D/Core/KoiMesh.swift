@@ -125,7 +125,6 @@ enum KoiMesh {
         path.close()
         let shape = SCNShape(path: path, extrusionDepth: depth)
         shape.chamferRadius = depth * 0.15
-        shape.flatness = 0.01
         shape.materials = [tooth]
         let node = SCNNode(geometry: shape)
         let cap = SCNCylinder(radius: ro * 0.3, height: depth * 1.5)
@@ -151,7 +150,6 @@ enum KoiMesh {
         path.close()
         let s = SCNShape(path: path, extrusionDepth: t)
         s.chamferRadius = t * 0.22
-        s.flatness = 0.02
         return s
     }
 }
